@@ -12,25 +12,27 @@ public class BusNetworksDSA {
         Scanner scan = new Scanner(System.in);
         System.out.println("Welcome the Vancouver Bus Network, if at any time you would like to stop the program" +
                 "please enter 'quit'");
-        System.out.print("Depart:");
+
 
         boolean quit = false;
         while (!quit) {
-
             if (scan.hasNext("quit")) {
+                System.out.println("Thank you for using this program");
                 quit = true;
                 scan.next();
 
-            } else if (scan.hasNextInt() && count %2 != 0) {
+            }
+             if (count %2 != 0)  {
+                System.out.print("Depart: ");
                 depart = scan.nextInt();
                 count++;
 
             } else if (scan.hasNextInt() && count % 2 == 0) {
+                System.out.println("Arrive: ");
                 arrive = scan.nextInt();
-                System.out.print("Arrive: ");
                 count++;
                 route = SP(depart,arrive);
-                System.out.println(route);
+                System.out.println("Route: "+route);
 
             }else {
                 System.out.println("Error - Enter a valid stop ID: ");

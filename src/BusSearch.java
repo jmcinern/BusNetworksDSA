@@ -17,9 +17,10 @@ public class BusSearch {
     of the names to the end of the names of the stops when reading the file into a TST (eg “WB HASTINGS ST FS HOLDOM AVE”
      becomes “HASTINGS ST FS HOLDOM AVE WB”)
      */
-    String meaningfulString = "";
+
 
     public String makeMeaningful(String line) {
+        String meaningfulString = "";
         String[] myStrings = line.split("\\s+");
         //Get keyword
         String keyWord = myStrings[0];
@@ -32,13 +33,10 @@ public class BusSearch {
         //Add all strings except the keyword that is still at the start.
         for (int i = 1; i < myStrings2.length; i++) {
             String current = myStrings2[i];
-            System.out.println(current);
             meaningfulString = meaningfulString.concat(current);
         }
         //Return meaningful String with keyword at end.
         return meaningfulString;
-
-
     }
 
     //stop_id, stop_code, stop_name, stop_desc, stop_lat, stop_lon, zone_id, stop_url, location_type, parent_station
@@ -50,16 +48,20 @@ public class BusSearch {
             try {
                 File f = new File(fileName);
                 Scanner scan = new Scanner(f);
-                //Start adding names from second lane in file as first line contains headings.
-                int i = 1;
+
+                int i = 0;
                 while (scan.hasNextLine()) {
                     //Get line of file.
                     curLine = scan.nextLine();
                     String[] myStrings = curLine.split(",");
                     //Get the name of the stop
                     String stopName = myStrings[2];
+                    stopName = makeMeaningful(stopName);
+                    //Don't add first line as it is heading.
+                    if (i != 0) {
+                        this.stopsTST.put(stopName, i);
+                    }
                     //Create TST and add stop names to it.
-                    stopsTST.put(stopName, i);
                     i++;
                 }
                 scan.close();
@@ -73,9 +75,16 @@ public class BusSearch {
 
     }
 
+    public String getStopInfo(String stopName)
+    {
+        String stopInfo = "";
+
+        return stopInfo;
+    }
+
 
     public TST getStopsTST()
     {
-        return stopsTST;
+        return this.stopsTST;
     }
 }

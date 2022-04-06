@@ -1,18 +1,43 @@
 import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class BusNetworksDSA {
     //Used as Interface.
     public static void main(String[] args) {
+
+        //Search stop name.
         BusSearch bs = new BusSearch();
         bs.fileToTST("stops.txt");
         TST<String> test = bs.getStopsTST();
         Scanner sc = new Scanner(System.in);
         System.out.println("What stop are you looking for?: ");
         String stopName = sc.next();
-        //= test.get(stopName);
+        stopName = stopName.toUpperCase();
+        Iterable<String> matches = test.keysWithPrefix(stopName);
+        //Convert matches into array to make it easier to operate on.
+        List<String> Arrmatches = new ArrayList<String>();
+        for (String str : matches) {
+            Arrmatches.add(str);
+        }
+        //Print stops.
+        if (Arrmatches.isEmpty())
+        {
+            System.out.println("No matches found");
+        }
+        for(int i = 0; i < Arrmatches.size(); i++)
+        {
+            System.out.println(Arrmatches.get(i));
+        }
 
-        //Get the route the user would like to take.
+        //Print stops with full info.
+
+
+
+
+
 
     }
 

@@ -6,11 +6,11 @@ public class BusNetworksDSA {
     public static void main(String[] args) {
         BusSearch bs = new BusSearch();
         bs.fileToTST("stops.txt");
-        TST test = bs.getStopsTST();
+        TST<String> test = bs.getStopsTST();
         Scanner sc = new Scanner(System.in);
         System.out.println("What stop are you looking for?: ");
         String stopName = sc.next();
-        = test.get(stopName);
+        //= test.get(stopName);
 
         //Get the route the user would like to take.
 
@@ -25,10 +25,5 @@ This should add a directed edge from 646 to 378, and a directed edge from 378 to
 Cost associated with edges should be as follows: 1 if it comes from stop_times.txt, 2 if it comes from transfers.txt with
 transfer type 0 (which is immediate transfer possible), and for transfer type 2 the cost is the minimum transfer time divided by 100.
  */
-    //Finding shortest paths between 2 bus stops (as input by the user)
-    public static String SP(int depart, int arrive)
-    {
-        String route = depart+" -> "+arrive;
-        return route;
-    }
+
 }

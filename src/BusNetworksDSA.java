@@ -4,42 +4,16 @@ import java.util.Scanner;
 public class BusNetworksDSA {
     //Used as Interface.
     public static void main(String[] args) {
+        BusSearch bs = new BusSearch();
+        bs.fileToTST("stops.txt");
+        TST test = bs.getStopsTST();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("What stop are you looking for?: ");
+        String stopName = sc.next();
+        = test.get(stopName);
+
         //Get the route the user would like to take.
-        int depart = 0;
-        int arrive = 0;
-        int count = 1;
-        String route = "";
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Welcome the Vancouver Bus Network, if at any time you would like to stop the program" +
-                "please enter 'quit'");
 
-
-        boolean quit = false;
-        while (!quit) {
-            if (scan.hasNext("quit")) {
-                System.out.println("Thank you for using this program");
-                quit = true;
-                scan.next();
-
-            }
-             if (count %2 != 0)  {
-                System.out.print("Depart: ");
-                depart = scan.nextInt();
-                count++;
-
-            } else if (scan.hasNextInt() && count % 2 == 0) {
-                System.out.println("Arrive: ");
-                arrive = scan.nextInt();
-                count++;
-                route = SP(depart,arrive);
-                System.out.println("Route: "+route);
-
-            }else {
-                System.out.println("Error - Enter a valid stop ID: ");
-                scan.next();
-            }
-
-        }
     }
 
     /*1. Finding shortest paths between 2 bus stops (as input by the user), returning the list of stops en route as

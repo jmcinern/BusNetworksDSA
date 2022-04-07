@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class BusSearch {
@@ -41,7 +42,7 @@ public class BusSearch {
 
     //stop_id, stop_code, stop_name, stop_desc, stop_lat, stop_lon, zone_id, stop_url, location_type, parent_station
     TST stopsTST = new TST<String>();
-
+    HashMap stopsMap = new HashMap();
     public void fileToTST(String fileName) {
         String curLine;
         if (fileName != null) {
@@ -53,16 +54,18 @@ public class BusSearch {
                 while (scan.hasNextLine()) {
                     //Get line of file.
                     curLine = scan.nextLine();
-                    String[] myStrings = curLine.split(",");
-                    //Get the name of the stop
-                    String stopName = myStrings[2];
-                    stopName = makeMeaningful(stopName);
-                    //Don't add first line as it is heading.
-                    if (i != 0) {
-                        this.stopsTST.put(stopName, i);
+
+                    if(i!=0) {
+                        Stop curStop = new Stop(curLine);   //Create stop object from row in stops.txt
+
+                        String[] myStrings = curLine.split(",");
+                        //Get the name of the stop
+                        String stopName = myStrings[2];
+                        stopName = makeMeaningful(stopName);
+                        //Store stop names with their ID as the key.
+                        this.stopsTST.put(stopName, curStop.getID() );
                     }
-                    //Create TST and add stop names to it.
-                    i++;
+                        i++;
                 }
                 scan.close();
             } catch (FileNotFoundException e) {

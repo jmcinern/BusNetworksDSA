@@ -21,7 +21,11 @@
 
  */
 
-public class Graph {
+import java.util.HashMap;
+
+public class stopsGraph {
+
+    HashMap stopMap = new HashMap();
 
 
 }

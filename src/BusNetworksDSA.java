@@ -1,40 +1,44 @@
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class BusNetworksDSA {
     //Used as Interface.
     public static void main(String[] args) {
 
-        //Search stop name.
-        BusSearch bs = new BusSearch();
-        bs.fileToTST("stops.txt");
-        TST<String> test = bs.getStopsTST();
-        Scanner sc = new Scanner(System.in);
-        System.out.println("What stop are you looking for?: ");
-        String stopName = sc.next();
-        stopName = stopName.toUpperCase();
-        Iterable<String> matches = test.keysWithPrefix(stopName);
-        //Convert matches into array to make it easier to operate on.
-        List<String> Arrmatches = new ArrayList<String>();
-        for (String str : matches) {
-            Arrmatches.add(str);
-        }
-        //Print stops.
-        if (Arrmatches.isEmpty())
-        {
-            System.out.println("No matches found");
-        }
-        for(int i = 0; i < Arrmatches.size(); i++)
-        {
-            System.out.println(Arrmatches.get(i));
-        }
+        Scanner choiceSc = new Scanner(System.in);
+        System.out.println("Welcome to the Vancouver bus management program, which function would you like to use?");
+        System.out.println("Type 1 to find the shortest route between two stops.");
+        System.out.println("Type 2 to search for a bus stop.");
+        System.out.println("Type 3 to see all buses that arrive at a specific time.");
+        System.out.println("Type 4 to quit.");
 
-        //Print stops with full info.
-
+        int choice = choiceSc.nextInt();
+        boolean quit = false;
+        while (quit == false)
+        {
+            if (choice == 1)
+            {
+                System.out.println("Shortest Path, TODO");
+            }
+            if (choice == 2)
+            {
+                BusSearch bs = new BusSearch();
+                bs.runSearch();
+            }
+            if (choice == 3)
+            {
+                System.out.println("Arrival times, TODO");
+            }
+            if (choice == 4)
+            {
+                quit = true;
+                System.out.println("Thanks, have a good day");
+            }
+        }
     }
+
+}
 
     /*1. Finding shortest paths between 2 bus stops (as input by the user), returning the list of stops en route as
 well as the associated “cost”. Stops are listed in stops.txt and connections (edges) between them come from
@@ -46,4 +50,4 @@ Cost associated with edges should be as follows: 1 if it comes from stop_times.t
 transfer type 0 (which is immediate transfer possible), and for transfer type 2 the cost is the minimum transfer time divided by 100.
  */
 
-}
+

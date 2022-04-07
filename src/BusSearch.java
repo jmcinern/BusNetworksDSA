@@ -1,6 +1,10 @@
+import com.sun.jdi.Value;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class BusSearch {
@@ -42,7 +46,7 @@ public class BusSearch {
 
     //stop_id, stop_code, stop_name, stop_desc, stop_lat, stop_lon, zone_id, stop_url, location_type, parent_station
     TST stopsTST = new TST<String>();
-    HashMap stopsMap = new HashMap();
+    HashMap infoMap = new HashMap(); //Stop ID as key, info as value
     public void fileToTST(String fileName) {
         String curLine;
         if (fileName != null) {
@@ -64,6 +68,7 @@ public class BusSearch {
                         stopName = makeMeaningful(stopName);
                         //Store stop names with their ID as the key.
                         this.stopsTST.put(stopName, curStop.getID() );
+                        this.infoMap.put(curStop.getID(), curStop.getInfo());
                     }
                         i++;
                 }
@@ -78,16 +83,45 @@ public class BusSearch {
 
     }
 
-    public String getStopInfo(String stopName)
-    {
-        String stopInfo = "";
-
-        return stopInfo;
-    }
-
-
     public TST getStopsTST()
     {
         return this.stopsTST;
     }
+
+    public HashMap getInfoMap() {
+        return this.infoMap;
+    }
+
+    public void runSearch()
+    {
+        BusSearch bs = new BusSearch();
+        bs.fileToTST("stops.txt");
+        TST<Integer> test = bs.getStopsTST();
+        HashMap testMap = bs.getInfoMap();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("What stop are you looking for?: ");
+        String stopName = sc.next();
+        stopName = stopName.toUpperCase();
+        //Get stop names that match user input.
+        Iterable<String> matchesNames = test.keysWithPrefix(stopName);
+
+
+        //Convert matches into array to make it easier to operate on.
+        List<String> Arrmatches = new ArrayList<String>();
+        for (String str : matchesNames) {
+            Arrmatches.add(str);
+        }
+        //Print stops.
+        if (Arrmatches.isEmpty()) {
+            System.out.println("No matches found");
+        }
+        for (int i = 0; i < Arrmatches.size(); i++) {
+            System.out.println("Stop Name: " + Arrmatches.get(i));
+            int ID = test.get( Arrmatches.get(i));
+            System.out.println("Stop ID: " + ID);
+            String info = (String) testMap.get(ID);
+            System.out.println("Extra information: " + info);
+        }
+    }
+
 }

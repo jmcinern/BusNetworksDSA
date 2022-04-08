@@ -28,7 +28,8 @@ public class BusNetworksDSA {
             }
             if (choice == 3)
             {
-                System.out.println("Arrival times, TODO");
+                Trips t = new Trips();
+                t.runSearch();
             }
             if (choice == 4)
             {

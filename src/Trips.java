@@ -2,9 +2,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 
 /*
@@ -23,7 +20,6 @@ public class Trips {
         if (isValidTime(timeIn))
         {
             //Return all stops that arrive at this time.
-            System.out.println("valid time: " + timeIn);
             String fname = "stop_times.txt";
             printStopsWithTime(fname, timeIn);
         }
@@ -64,7 +60,7 @@ public class Trips {
                         if (arrivalTime.equals(timeIn))
                         {
                             System.out.println("Stop ID: "+ curStop.stop_time_ID);
-                            System.out.println("Stop info: "+ curStop.getStop_time_info());
+                            System.out.println("Stop Info: "+ curStop.getStop_time_info());
                         }
 
                     }

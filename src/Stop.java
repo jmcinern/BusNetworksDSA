@@ -14,7 +14,7 @@ public class Stop {
             if(!curInfo.isEmpty()) {
                  //Seperate each type of info by comma.
                 this.info = this.info.concat(curInfo);
-                if (i<myStrings.length-1) {
+                if (i < myStrings.length-1) {
                     this.info = this.info.concat(",");
                 }
             }

@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,73 +14,70 @@ Arrival time should be provided by the user as hh:mm:ss. When reading in stop_ti
 all invalid times, e.g., there are times in the file that start at 27/28 hours, so are clearly invalid. Maximum time allowed is 23:59:59.
  */
 public class Trips {
-    HashMap ID_time = new HashMap(); //Store times and stop IDs
-    HashMap ID_info = new HashMap(); //Store info and stop ID
 
     public void runSearch() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("What time would you like to arrive at? (hh:mm:ss)");
+        System.out.println("What time would you like to arrive at?: ");
         String timeIn = sc.next();
-        Trips ts = new Trips();
-        ts.fileToHash("stop_times.txt");
-        HashMap ID_time_run = ts.getID_time();
-        HashMap ID_info_run = ts.getID_info();
-        //Return stop IDs that match time in ascending order of ID
-
-
-
+        //If time inputed is valid
+        if (isValidTime(timeIn))
+        {
+            //Return all stops that arrive at this time.
+            System.out.println("valid time: " + timeIn);
+            String fname = "stop_times.txt";
+            printStopsWithTime(fname, timeIn);
+        }
+        else {
+            System.out.println("Invalid time");
+        }
     }
 
-    public void fileToHash(String fileName) {
+    public boolean isValidTime(String time)
+    {
+        boolean isValid = false;
+        try {
+            LocalTime.parse(time);
+            isValid = true;
+        } catch (DateTimeParseException | NullPointerException e) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    public void printStopsWithTime(String fname, String timeIn)
+    {
         String curLine;
-        if (fileName != null) {
+        if (fname != null) {
             try {
-                File f = new File(fileName);
+                File f = new File(fname);
                 Scanner scan = new Scanner(f);
 
                 int i = 0;
                 while (scan.hasNextLine()) {
                     //Get line of file.
                     curLine = scan.nextLine();
-
-                    if (i != 0) {
+                    if(i!=0) {
                         StopTime curStop = new StopTime(curLine);   //Create stop object from row in stops.txt
                         String[] myStrings = curLine.split(",");
-                        //Get the name of the stop
                         String arrivalTime = myStrings[1];
-                        //Check if time is valid.
-                        if(isValidTime(arrivalTime))
+
+                        if (arrivalTime.equals(timeIn))
                         {
-                            ID_time.put(curStop.getStop_time_ID(), arrivalTime);
-                            ID_info.put(curStop.getStop_time_ID(), curStop.getStop_time_info());
+                            System.out.println("Stop ID: "+ curStop.stop_time_ID);
+                            System.out.println("Stop info: "+ curStop.getStop_time_info());
                         }
+
                     }
                     i++;
                 }
                 scan.close();
             } catch (FileNotFoundException e) {
                 System.out.println("file not found");
-                return;
+
             }
+        } else {
+
         }
     }
-    public HashMap getID_time()
-    {
-        return  this.ID_time;
-    }
-    public HashMap getID_info()
-    {
-        return this.ID_info;
-    }
-    public boolean isValidTime(String time)
-    {
-        time = time.replaceAll(" ", "");//remove whitespace.
-        boolean isValid = false;
-        String[] timeArr = time.split(":");
-        if( Integer.parseInt(timeArr[0]) < 24 && Integer.parseInt(timeArr[1]) < 60 && Integer.parseInt(timeArr[2]) < 60 )
-        {
-            isValid = true;
-        }
-        return isValid;
-    }
+
 }

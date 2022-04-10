@@ -24,7 +24,11 @@ public class BusDijskra {
     public BusDijskra()
     {
         int V = 8757; //Number of stop from stops.txt.
-        this.G = new EdgeWeightedDigraph(V);
+        int E = V*2;
+        this.G = new EdgeWeightedDigraph(V, E);
+        stopTimesToEdges();
+        transfersToEdges();
+
     }
     //
     public void stopTimesToEdges()
@@ -37,28 +41,47 @@ public class BusDijskra {
         File f = new File(fname);
         try {
             Scanner sc = new Scanner(f);
+            int count = 0; //Ignore first line.
             while (sc.hasNextLine()) {
                 // Read directed edge from file
-                curLine = sc.nextLine();
-                nextLine = sc.nextLine();
-                values = curLine.trim().split(",");
-                valuesNext = nextLine.trim().split(",");
-                int curStopTrip= Integer.parseInt(values[0]);
-                int nextStopTrip = Integer.parseInt(valuesNext[0]);
-                int curSeq = Integer.parseInt(values[4]);
-                int nextSeq = Integer.parseInt(values[4]);
+                String header = sc.nextLine();
+                if(count >-1) { //Useful for testing.
+                    curLine = sc.nextLine();
+                    if(sc.hasNext()) {
+                        nextLine = sc.nextLine();
+                    }
+                    else
+                    {
+                        nextLine = null;
+                    }
 
-                int cost = 1; //Per spec.
-                if(nextSeq == curSeq+1 && curStopTrip == nextStopTrip) {
-                    // Add directed edge to graph if stops are one after the other and on same bus route.
-                    List<DirectedEdge> list = G.adj.getOrDefault(curStopTrip, new ArrayList<>()); // List
-                    list.add(new DirectedEdge(curStopTrip, nextStopTrip, cost));
-                    G.adj.put(curStopTrip, list);
+                    if (nextLine != null) {
+                        values = curLine.trim().split(",");
+                        valuesNext = nextLine.trim().split(",");
+                        int curStopTrip = Integer.parseInt(values[0]);
+                        int nextStopTrip = Integer.parseInt(valuesNext[0]);
+                        int curSeq = Integer.parseInt(values[4]);
+                        int nextSeq = Integer.parseInt(valuesNext[4]);
+                        int curStopID = Integer.parseInt(values[3]);
+                        int nextStopID = Integer.parseInt(valuesNext[3]);
+                        //Need stop IDs to create directed edge.
+                        int cost = 1; //Per spec.
+
+
+                        if (nextSeq == curSeq + 1 && curStopTrip == nextStopTrip) {
+                            // Add directed edge to graph if stops are one after the other and on same bus route.
+                            List<DirectedEdge> list = G.adj.getOrDefault(curStopID, new ArrayList<>()); // List
+                            list.add(new DirectedEdge(curStopID, nextStopID, cost));
+                            G.adj.put(curStopID, list);
+                        }
+                    }
                 }
-            }
+                count++;
+                }
             sc.close();
 
         } catch (FileNotFoundException e) {
+            System.out.println("File error");
             e.printStackTrace();
         }
 
@@ -72,32 +95,38 @@ public class BusDijskra {
         File f = new File(fname);
         try {
             Scanner sc = new Scanner(f);
+            int count=0;
             while (sc.hasNextLine()) {
                 // Read directed edge from file
+                String header = sc.nextLine();
                 curLine = sc.nextLine();
                 values = curLine.trim().split(",");
-                int fromStop = Integer.parseInt(values[0]);
-                int toStop = Integer.parseInt(values[1]);
-                int transferType = Integer.parseInt(values[2]);
-                int minTransferTime = Integer.parseInt(values[3]);
-                int cost = 0;
-                if (transferType == 0)
-                {
-                    cost = 2;
-                }
-                if(transferType == 0)
-                {
-                    cost = minTransferTime / 100;
-                }
+                if(count>-1) {
+                    int fromStop = Integer.parseInt(values[0]);
+                    int toStop = Integer.parseInt(values[1]);
+                    int transferType = Integer.parseInt(values[2]);
 
-                // Add directed edge to graph.
-                List<DirectedEdge> list = G.adj.getOrDefault(fromStop, new ArrayList<>()); // List
-                list.add(new DirectedEdge(fromStop, toStop, cost));
-                G.adj.put(fromStop, list);
+                    int cost = 0;
+                    if (transferType == 0) {
+                        cost = 2;
+                    }
+                    if (transferType == 2) {
+                        int minTransferTime = Integer.parseInt(values[3]);
+                        cost = minTransferTime / 100;
+                    }
+
+                    // Add directed edge to graph.
+                    List<DirectedEdge> list = G.adj.getOrDefault(fromStop, new ArrayList<>()); // List
+                    list.add(new DirectedEdge(fromStop, toStop, cost));
+                    G.adj.put(fromStop, list);
+
+                }
+                count++;
             }
             sc.close();
 
         } catch (FileNotFoundException e) {
+            System.out.println("File error");
             e.printStackTrace();
         }
     }
@@ -117,10 +146,10 @@ public class BusDijskra {
 
         distTo[src] = 0.0;
         queue.add(src);
-
         while (!queue.isEmpty())
         {
             int curV = queue.poll();
+            System.out.println("curV: "+curV);
             marked[curV] = true;
             for (DirectedEdge adjacent : adj.getOrDefault(curV, new ArrayList<>()))
             {
@@ -131,6 +160,7 @@ public class BusDijskra {
                     double newDist = distTo[curV] + adjacent.weight;
                     if (newDist < distTo[adjNode])
                     {
+                        System.out.println("Distance is updated");
                         distTo[adjNode] = newDist;
                         queue.remove(adjNode);
                         queue.add(adjNode);
@@ -141,7 +171,38 @@ public class BusDijskra {
         return distTo;
     }
 
-
-
-
+    public int runSearch()
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter stop ID of departure stop: ");
+        int fromID = sc.nextInt();
+        System.out.println("Enter stop ID of destination stop: ");
+        int toID = sc.nextInt();
+        if (this.G == null)
+        {
+            System.out.println("Null graph error");
+            return -1;
+        }
+        BusDijskra bd = new BusDijskra();
+        int sp = 0;
+        double minDistance = 0.0;
+        for (int i = 0; i < G.V; i++)
+        {
+            double[] dist = bd.DijkstraSP(i); //Returns an array of distances from source vertex to all other vertices.
+            //Find the shortest distance to destination.
+            for (int j = 0; j < G.V; j++)
+            {
+                double curDistance = dist[j];
+                if (curDistance == Double.POSITIVE_INFINITY)
+                {
+                    System.out.println("Max value reached");
+                    return -1;
+                }
+                minDistance = Math.min(curDistance, minDistance);
+            }
+        }
+        sp = (int) minDistance;
+        System.out.println("Shortest path: "+sp);
+        return sp;
+    }
 }

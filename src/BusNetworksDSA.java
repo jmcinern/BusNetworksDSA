@@ -13,13 +13,22 @@ public class BusNetworksDSA {
         System.out.println("Type 3 to see all buses that arrive at a specific time.");
         System.out.println("Type 4 to quit.");
 
-        int choice = choiceSc.nextInt();
+        int choice = 0;
+        if(choiceSc.hasNextInt()) {
+             choice = choiceSc.nextInt();
+        }
+        else
+        {
+            System.out.println("PLease enter a number from 1-4");
+
+        }
         boolean quit = false;
         while (quit == false)
         {
             if (choice == 1)
             {
                 BusDijskra d = new BusDijskra();
+                d.runSearch();
             }
             if (choice == 2)
             {
@@ -36,6 +45,7 @@ public class BusNetworksDSA {
                 quit = true;
                 System.out.println("Thanks, have a good day");
             }
+
         }
     }
 

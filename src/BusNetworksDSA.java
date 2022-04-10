@@ -19,7 +19,7 @@ public class BusNetworksDSA {
         {
             if (choice == 1)
             {
-                System.out.println("Shortest Path, TODO");
+                BusDijskra d = new BusDijskra();
             }
             if (choice == 2)
             {

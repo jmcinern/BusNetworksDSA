@@ -24,7 +24,7 @@ public class BusDijskra {
     public BusDijskra()
     {
         int V = 8757; //Number of stop from stops.txt.
-        int E = V*2;
+        int E = 8757;
         this.G = new EdgeWeightedDigraph(V, E);
         stopTimesToEdges();
         transfersToEdges();
@@ -134,6 +134,7 @@ public class BusDijskra {
     //Dijskra algorithm to find shortest path of source vertex to all other vertices.
     public double[] DijkstraSP(int src)
     {
+
         boolean[] marked = new boolean[G.V];
         double[] distTo = new double[G.V];
         PriorityQueue<Integer> queue = new PriorityQueue<>(Comparator.comparing(vertex -> distTo[vertex]));
@@ -149,7 +150,6 @@ public class BusDijskra {
         while (!queue.isEmpty())
         {
             int curV = queue.poll();
-            System.out.println("curV: "+curV);
             marked[curV] = true;
             for (DirectedEdge adjacent : adj.getOrDefault(curV, new ArrayList<>()))
             {
@@ -183,6 +183,7 @@ public class BusDijskra {
             System.out.println("Null graph error");
             return -1;
         }
+        //Create hashmap of graph index and stop number.
         BusDijskra bd = new BusDijskra();
         int sp = 0;
         double minDistance = 0.0;
@@ -197,8 +198,8 @@ public class BusDijskra {
                 {
                     System.out.println("Max value reached");
                     return -1;
+
                 }
-                minDistance = Math.min(curDistance, minDistance);
             }
         }
         sp = (int) minDistance;

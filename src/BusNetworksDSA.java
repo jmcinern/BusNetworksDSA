@@ -6,21 +6,30 @@ public class BusNetworksDSA {
     //Used as Interface.
     public static void main(String[] args) {
 
-        Scanner choiceSc = new Scanner(System.in);
         System.out.println("Welcome to the Vancouver bus management program, which function would you like to use?");
-        System.out.println("Type 1 to find the shortest route between two stops.");
-        System.out.println("Type 2 to search for a bus stop.");
-        System.out.println("Type 3 to see all buses that arrive at a specific time.");
-        System.out.println("Type 4 to quit.");
-
+        Scanner choiceSc = new Scanner(System.in);
+        boolean validInput = false;
         int choice = 0;
-        if(choiceSc.hasNextInt()) {
-             choice = choiceSc.nextInt();
-        }
-        else
-        {
-            System.out.println("PLease enter a number from 1-4");
-
+        while(!validInput) {
+            System.out.println("Type 1 to find the shortest route between two stops.");
+            System.out.println("Type 2 to search for a bus stop by name.");
+            System.out.println("Type 3 to see all buses that arrive at a specific time.");
+            System.out.println("Type 4 to quit.");
+            if (choiceSc.hasNextInt()) {
+                choice = choiceSc.nextInt();
+                if(choice > 0 && choice < 5) {
+                    validInput = true;
+                }
+                else{
+                    System.out.println("Invalid choice, please enter a number between 1 and 4.");
+                    choiceSc.next();
+                }
+            }
+            else
+            {
+                System.out.println("Invalid choice, please enter a number between 1 and 4.");
+                choiceSc.next();
+            }
         }
         boolean quit = false;
         while (quit == false)
@@ -45,7 +54,6 @@ public class BusNetworksDSA {
                 quit = true;
                 System.out.println("Thanks, have a good day");
             }
-
         }
     }
 

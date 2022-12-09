@@ -1,17 +1,18 @@
-																				CSU22012 Algorithms and Data Structures Design Document
-																				   Joseph McInerney
-
+CSU22012 Algorithms and Data Structures Design Document
+Joseph McInerney
+																				
+																		
 Introduction
 	
-	-In this document I will go through the decisions  that I made along the way in doing this project. I will discuss the various data structures and algorithms that 
+-In this document I will go through the decisions  that I made along the way in doing this project. I will discuss the various data structures and algorithms that 
 I used in my attempt to provide the desired functionality.
 
 Desired Functionality
 	
-	-There were three core functions that were to be implemented for this assignment. The first being functionality that allows a client to search between two bus stops 
-	in the network and have the shortest path between them returned to them. The second piece of functionality to be implemented in this assignment was to allow the client 
-	to search for a stop by the stops name. And the final function to be implemented was a search function that would allow the client to search for stop information based
-	on arrival time.
+-There were three core functions that were to be implemented for this assignment. The first being functionality that allows a client to search between two bus stops 
+in the network and have the shortest path between them returned to them. The second piece of functionality to be implemented in this assignment was to allow the client 
+to search for a stop by the stops name. And the final function to be implemented was a search function that would allow the client to search for stop information based
+on arrival time.
 
 Shortest Path between Two Stops
 

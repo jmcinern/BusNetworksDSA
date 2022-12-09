@@ -1,5 +1,5 @@
-																												CSU22012 Algorithms and Data Structures Design Document
-																																			Joseph McInerney
+																				CSU22012 Algorithms and Data Structures Design Document
+																				   Joseph McInerney
 
 Introduction
 	
